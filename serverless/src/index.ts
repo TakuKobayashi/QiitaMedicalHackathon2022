@@ -3,6 +3,10 @@ import fastify from 'fastify';
 import twilio from 'twilio';
 import { Sequelize, Model, DataTypes } from 'sequelize';
 
+import { adminRouter } from './routes/admins/crud';
+import { twilioRouter } from './routes/webhooks/twilio';
+
+/*
 const sequelize = new Sequelize({
   host: "localhost",
   dialect: 'mysql',
@@ -53,6 +57,7 @@ PromoteUser.init({
   // createdAtやupdatedAtを指定したくない場合はtimestamps: falseを指定する
   timestamps: false,
 });
+*/
 
 const tilioClient = twilio(process.env.TWILIO_ACCOUNT_SID, process.env.TWILIO_AUTH_TOKEN);
 const VoiceResponse = twilio.twiml.VoiceResponse;
@@ -63,9 +68,13 @@ const fromPhoneNumber = '+...';
 const app = fastify();
 
 app.get('/', async (request, reply) => {
-  const promote_user = await PromoteUser.findOne({ where: { id: 1597223525203449 } })
-  console.log(promote_user)
-  console.log(promote_user.id)
+  return { hello: 'world' };
+});
+
+app.get('/dbcheck', async (request, reply) => {
+//  const promote_user = await PromoteUser.findOne({ where: { id: 1597223525203449 } })
+//  console.log(promote_user)
+//  console.log(promote_user.id)
   return { hello: 'world' };
 });
 
@@ -106,5 +115,8 @@ app.get('/call', async (request, reply) => {
   const callResults = await Promise.all(callResultPromises);
   return callResults;
 });
+
+app.register(adminRouter, { prefix: '/admin' });
+app.register(twilioRouter, { prefix: '/webhooks/twilio' });
 
 export const handler = awsLambdaFastify(app);
