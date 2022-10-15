@@ -4,10 +4,28 @@ import twilio from 'twilio';
 const tilioClient = twilio(process.env.TWILIO_ACCOUNT_SID, process.env.TWILIO_AUTH_TOKEN);
 const VoiceResponse = twilio.twiml.VoiceResponse;
 
+const toPhoneNumbers = ['+...', '+...'];
+const fromPhoneNumber = '+...';
+
 const app = fastify();
 
 app.get('/', async (request, reply) => {
   return { hello: 'world' };
+});
+
+app.get('/send_message', async (request, reply) => {
+  const messageResultPromises = [];
+  for (const toPhoneNumber of toPhoneNumbers) {
+    messageResultPromises.push(
+      tilioClient.messages.create({
+        body: 'オッス!!オラ悟空!!',
+        from: fromPhoneNumber,
+        to: toPhoneNumber,
+      }),
+    );
+  }
+  const messageResults = await Promise.all(messageResultPromises);
+  return messageResults;
 });
 
 app.get('/call', async (request, reply) => {
@@ -20,12 +38,11 @@ app.get('/call', async (request, reply) => {
     'オッス!!オラゴクウ!!',
   );
   const callResultPromises = [];
-  const toPhoneNumbers = ['+...', '+...'];
   for (const toPhoneNumber of toPhoneNumbers) {
     callResultPromises.push(
       tilioClient.calls.create({
         twiml: twiml.toString(),
-        from: '+...',
+        from: fromPhoneNumber,
         to: toPhoneNumber,
       }),
     );
