@@ -103,12 +103,16 @@ app.get('/call', async (request, reply) => {
     'オッス!!オラゴクウ!!',
   );
   const callResultPromises = [];
+  //const currentBaseUrl = [request.protocol + '://' + request.hostname, request.awsLambda.event.requestContext.stage].join('/');
+  const currentBaseUrl = ['https://' + request.hostname, request.awsLambda.event.requestContext.stage].join('/');
   for (const toPhoneNumber of toPhoneNumbers) {
     callResultPromises.push(
       tilioClient.calls.create({
         twiml: twiml.toString(),
         from: fromPhoneNumber,
         to: toPhoneNumber,
+        statusCallback: currentBaseUrl + '/webhooks/twilio/call_handler',
+        statusCallbackMethod: 'POST',
       }),
     );
   }
