@@ -1,6 +1,7 @@
 import awsLambdaFastify from '@fastify/aws-lambda';
 import fastify from 'fastify';
-// https://www.serverless.com/examples/aws-node-puppeteer
+import twilio from 'twilio';
+const tilioClient = twilio(process.env.TWILIO_ACCOUNT_SID, process.env.TWILIO_AUTH_TOKEN);
 
 const app = fastify();
 
