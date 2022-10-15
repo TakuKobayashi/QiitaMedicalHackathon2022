@@ -17,14 +17,21 @@ app.get('/call', async (request, reply) => {
       language: 'ja-JP',
       voice: 'woman',
     },
-    'オッス!!オラ悟空!!',
+    'オッス!!オラゴクウ!!',
   );
-  const callResult = await tilioClient.calls.create({
-    twiml: twiml.toString(),
-    from: '+...',
-    to: '+...'
-  })
-  return callResult;
+  const callResultPromises = [];
+  const toPhoneNumbers = ['+...', '+...'];
+  for (const toPhoneNumber of toPhoneNumbers) {
+    callResultPromises.push(
+      tilioClient.calls.create({
+        twiml: twiml.toString(),
+        from: '+...',
+        to: toPhoneNumber,
+      }),
+    );
+  }
+  const callResults = await Promise.all(callResultPromises);
+  return callResults;
 });
 
 export const handler = awsLambdaFastify(app);
