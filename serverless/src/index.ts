@@ -2,6 +2,7 @@ import awsLambdaFastify from '@fastify/aws-lambda';
 import fastify from 'fastify';
 import twilio from 'twilio';
 import { Sequelize, Model, DataTypes } from 'sequelize';
+import cors from '@fastify/cors'
 
 import { setupFireStore } from './common/firestore';
 const firestore = setupFireStore();
@@ -69,6 +70,11 @@ const VoiceResponse = twilio.twiml.VoiceResponse;
 const fromPhoneNumber = '+16293006557';
 
 const app = fastify();
+app.register(cors, {
+  origin: (origin, cb) => {
+    cb(null, true)
+  }
+});
 
 app.get('/', async (request, reply) => {
   return { hello: 'world' };
