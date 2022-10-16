@@ -3,6 +3,9 @@ import fastify from 'fastify';
 import twilio from 'twilio';
 import { Sequelize, Model, DataTypes } from 'sequelize';
 
+import { setupFireStore } from './common/firestore';
+const firestore = setupFireStore();
+
 import { adminRouter } from './routes/admins';
 import { twilioRouter } from './routes/webhooks/twilio';
 import { sensorsVitalRouter } from './routes/sensors/vitals';
@@ -63,7 +66,6 @@ PromoteUser.init({
 const tilioClient = twilio(process.env.TWILIO_ACCOUNT_SID, process.env.TWILIO_AUTH_TOKEN);
 const VoiceResponse = twilio.twiml.VoiceResponse;
 
-const toPhoneNumbers = ['+...', '+...'];
 const fromPhoneNumber = '+...';
 
 const app = fastify();
@@ -80,6 +82,7 @@ app.get('/dbcheck', async (request, reply) => {
 });
 
 app.get('/send_message', async (request, reply) => {
+  const toPhoneNumbers = await loadToPhoneNumbers();
   const messageResultPromises = [];
   for (const toPhoneNumber of toPhoneNumbers) {
     messageResultPromises.push(
@@ -103,6 +106,7 @@ app.get('/call', async (request, reply) => {
     },
     'オッス!!オラゴクウ!!',
   );
+  const toPhoneNumbers = await loadToPhoneNumbers();
   const callResultPromises = [];
   //const currentBaseUrl = [request.protocol + '://' + request.hostname, request.awsLambda.event.requestContext.stage].join('/');
   const currentBaseUrl = ['https://' + request.hostname, request.awsLambda.event.requestContext.stage].join('/');
@@ -120,6 +124,16 @@ app.get('/call', async (request, reply) => {
   const callResults = await Promise.all(callResultPromises);
   return callResults;
 });
+
+async function loadToPhoneNumbers(): Promise<string[]> {
+  const currentDocList = await firestore.collection("patient_relation_contacts").get();
+  const docsDataList: string[] = []
+  const currentDocs = currentDocList.docs
+  for(const doc of currentDocs){
+    docsDataList.push(doc.data().phone_number.toString())
+  }
+  return docsDataList;
+}
 
 app.register(adminRouter, { prefix: '/admin' });
 app.register(sensorsVitalRouter, { prefix: '/sensors/vital' });
