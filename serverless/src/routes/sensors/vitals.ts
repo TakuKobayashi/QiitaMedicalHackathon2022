@@ -45,7 +45,7 @@ async function checkNotification(){
   for(const doc of currentDocList.docs){
     const sensorData = doc.data();
     // vital_type = 1 心拍数
-    if(sensorData.vital_type === 1){
+    if(sensorData.vital_type == 1){
       // 心拍数が100を下回った
       alertScore = alertScore + Math.max(alertBaseScore - sensorData.value, 0)
     }
