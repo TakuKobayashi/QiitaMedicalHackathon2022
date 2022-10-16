@@ -28,7 +28,7 @@ jobs:
         echo "TWILIO_ACCOUNT_SID=${TWILIO_ACCOUNT_SID}" >> ./.env
         echo "TWILIO_AUTH_TOKEN=${TWILIO_AUTH_TOKEN}" >> ./.env
     - name: Register firebaseConfig.json
-      working-directory: ./server
+      working-directory: ./serverless
       env:
         FIREBASE_CONFIG: ${{ secrets.FIREBASE_CONFIG }}
       run: |
