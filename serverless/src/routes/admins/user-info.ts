@@ -15,6 +15,7 @@ export async function userInfoAdminRouter(app, opts): Promise<void> {
     for(const doc of currentDocs){
       docsDataList.push(doc.data())
     }
+    res.header('Access-Control-Expose-Headers', 'X-Total-Count');
     res.header("X-Total-Count", docsDataList.length.toString());
     return docsDataList;
   });
