@@ -9,10 +9,10 @@ const serverlessConfiguration: AWS = {
   plugins: ['serverless-esbuild', 'serverless-offline', 'serverless-dotenv-plugin'],
   provider: {
     name: 'aws',
-    runtime: 'nodejs14.x',
+    runtime: 'nodejs16.x',
     region: 'ap-northeast-1',
     timeout: 900,
-    memorySize: 128,
+    memorySize: 256,
     apiGateway: {
       minimumCompressionSize: 1024,
       shouldStartNameWithService: true,
