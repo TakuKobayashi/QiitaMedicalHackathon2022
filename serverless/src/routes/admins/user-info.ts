@@ -15,7 +15,7 @@ export async function userInfoAdminRouter(app, opts): Promise<void> {
     for(const doc of currentDocs){
       docsDataList.push(doc.data())
     }
-    res.header("x-total-count", docsDataList.length.toString());
+    res.header("X-Total-Count", docsDataList.length.toString());
     return docsDataList;
   });
   // 電話番号の登録
