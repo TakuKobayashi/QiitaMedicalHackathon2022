@@ -3,8 +3,9 @@ import fastify from 'fastify';
 import twilio from 'twilio';
 import { Sequelize, Model, DataTypes } from 'sequelize';
 
-import { adminRouter } from './routes/admins/crud';
+import { adminRouter } from './routes/admins';
 import { twilioRouter } from './routes/webhooks/twilio';
+import { sensorsVitalRouter } from './routes/sensors/vitals';
 
 /*
 const sequelize = new Sequelize({
@@ -121,6 +122,7 @@ app.get('/call', async (request, reply) => {
 });
 
 app.register(adminRouter, { prefix: '/admin' });
+app.register(sensorsVitalRouter, { prefix: '/sensors/vital' });
 app.register(twilioRouter, { prefix: '/webhooks/twilio' });
 
 export const handler = awsLambdaFastify(app);
