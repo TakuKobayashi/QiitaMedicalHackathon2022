@@ -17,7 +17,7 @@ export async function userInfoAdminRouter(app, opts): Promise<void> {
     }
     res.header('Access-Control-Expose-Headers', 'X-Total-Count');
     res.header("X-Total-Count", docsDataList.length.toString());
-    return {data: docsDataList, total: docsDataList.length};
+    return docsDataList;
   });
   // 電話番号の登録
   app.post('/create', async (req, res) => {
@@ -25,7 +25,7 @@ export async function userInfoAdminRouter(app, opts): Promise<void> {
     const contactId = crypto.randomBytes(12).toString('hex')
     const currentDoc = await firestore.collection(tableName).doc(contactId);
     const newData = {...req.body,
-      contact_id: contactId, created_at: new Date().getTime()
+      id: contactId, created_at: new Date().getTime()
     }
     await currentDoc.set(newData);
     return newData;
