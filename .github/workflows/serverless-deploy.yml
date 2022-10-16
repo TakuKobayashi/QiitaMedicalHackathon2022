@@ -27,6 +27,12 @@ jobs:
       run: |
         echo "TWILIO_ACCOUNT_SID=${TWILIO_ACCOUNT_SID}" >> ./.env
         echo "TWILIO_AUTH_TOKEN=${TWILIO_AUTH_TOKEN}" >> ./.env
+    - name: Register firebaseConfig.json
+      working-directory: ./server
+      env:
+        FIREBASE_CONFIG: ${{ secrets.FIREBASE_CONFIG }}
+      run: |
+        echo "${FIREBASE_CONFIG}" >> ./firebaseConfig.json
     - name: yarn install
       working-directory: ./serverless
       run: yarn install
