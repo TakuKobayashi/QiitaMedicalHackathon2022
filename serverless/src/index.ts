@@ -66,7 +66,7 @@ PromoteUser.init({
 const tilioClient = twilio(process.env.TWILIO_ACCOUNT_SID, process.env.TWILIO_AUTH_TOKEN);
 const VoiceResponse = twilio.twiml.VoiceResponse;
 
-const fromPhoneNumber = '+...';
+const fromPhoneNumber = '+16293006557';
 
 const app = fastify();
 
