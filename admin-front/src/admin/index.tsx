@@ -6,6 +6,7 @@ const dataProvider = jsonServerProvider("https://p2e3m40ce5.execute-api.ap-north
 const App = () => (
   <Admin dataProvider={dataProvider}>
     <Resource name="user_info/list" list={ListGuesser} />
+    <Resource name="user_vital/list" list={ListGuesser} />
   </Admin>
 );
 
