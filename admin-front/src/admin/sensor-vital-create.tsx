@@ -1,5 +1,5 @@
 import * as React from "react";
-import { Create, SimpleForm, TextInput, SelectField, required, NumberInput} from 'react-admin';
+import { Create, SimpleForm, required, NumberInput} from 'react-admin';
 
 export const VitalCreate = () => (
   <Create resource="sensors/vital/record">
